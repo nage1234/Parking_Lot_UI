@@ -1,0 +1,17 @@
+
+.leftBoard {
+    width: 10%;
+    background: #87aaae;
+    height: 100%;
+}
+
+.rightContentArea {
+    width: 90%;
+    height: 100%;
+}
+
+.pinItComp {
+    background: white;
+    color: black;
+    margin: 30px 10px 10px 10px;
+}
