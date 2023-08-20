@@ -3,14 +3,11 @@ import '../../styles/PinMe.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
 
-const PinMe = ({ x, y, id }) => {
+const PinMe = ({ id, deletePinMeCB }) => {
     const [bulletinNews, setBulletinNews] = useState('Add announcement');
-    const marginXY = {
-        position: "absolute",
-        top: x+"px",
-        left: y+"px"
-    };
-    console.log("marginXY = ",marginXY);
+    const deletePinMe = () => {
+        deletePinMeCB(id);
+    }
     return (
         <>
             <div className="pinMeContent" >
@@ -18,7 +15,7 @@ const PinMe = ({ x, y, id }) => {
                     <div className="editIcon">
                         <FontAwesomeIcon icon={faPen} />
                     </div>
-                    <div className="deleteIcon">
+                    <div className="deleteIcon" onClick={(evt) => deletePinMe()}>
                         <FontAwesomeIcon icon={faTrash} />
                     </div>
                 </div>

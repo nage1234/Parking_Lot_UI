@@ -4,6 +4,7 @@ import PinMe from './PinMe';
 
 const BulletinBoard = () => {
     const [pinMeAttributes, setPinMeAttributes] = useState([]);
+    const [countId, setCountId] = useState(0);
 
     const dragPinIt = () => {
 
@@ -12,12 +13,19 @@ const BulletinBoard = () => {
     const onDropPinIt = () => {
     };
 
+    const deletePinMeCB = (id) => {
+        //int index = pinMeAttributes.findIndex(item => item.id === id);
+        setPinMeAttributes(pinMeAttributes.filter(item => item.id !== id));
+        setCountId(countId-1);
+    }
+
     const onDragDropContainer = (evt) => {
         evt.preventDefault();
         console.log("on Drag Over exit in container", evt.clientX, " --- y = ", evt.clientY);
         const { top, left } = evt.target.getBoundingClientRect();
-        const data = createPinItTemplate(top, left, evt.clientX, evt.clientY, 1);
+        const data = createPinItTemplate(top, left, evt.clientX, evt.clientY, countId+1);
         setPinMeAttributes((existingData) => [...existingData, data]);
+        setCountId(countId+1);
     };
 
     const createPinItTemplate = (top, left, x, y, id) => {
@@ -33,14 +41,14 @@ const BulletinBoard = () => {
     const createBoardComponents = () => {
         const comp = pinMeAttributes.map((item) => {
             const marginXY = {                
-                left: (item.x-item.left) + "px",
-                top: (item.y - item.top) + "px",
+                left: item.x + "px",
+                top: item.y + "px",
                 position: "absolute"
             };
             return (
 
                 <div style={marginXY}>
-                <PinMe x={item.x} y={item.y} id={item.id} />
+                <PinMe id={item.id} deletePinMeCB={deletePinMeCB}/>
                 </div>
 
             )
@@ -52,12 +60,19 @@ const BulletinBoard = () => {
         event.preventDefault();
     };
 
+    const trackTheCoord = (event) => {
+        const mousePos = { x: event.clientX, y: event.clientY };
+        const mousePosText = document.getElementById('mouse-pos');
+        mousePosText.textContent = `(${mousePos.x}, ${mousePos.y})`;
+    };
+
     return (
         <>
             <div className="leftBoard">
                 <div draggable="true" className="pinItComp" >Pin It</div>                    
             </div>
-            <div onDrop={(evt) => onDragDropContainer(evt)} onDragOver={(evt) => allowDrop(evt)}  className="rightContentArea">
+            <div onDrop={(evt) => onDragDropContainer(evt)} onDragOver={(evt) => allowDrop(evt)}  onMouseMove={(e)=>trackTheCoord(e)} className="rightContentArea">
+                <div id="mouse-pos">helllo!</div>
                 { createBoardComponents() }
             </div>
         </>
